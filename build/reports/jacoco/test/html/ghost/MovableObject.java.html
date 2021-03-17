@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MovableObject.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Milestone</a> &gt; <a href="index.source.html" class="el_package">ghost</a> &gt; <span class="el_source">MovableObject.java</span></div><h1>MovableObject.java</h1><pre class="source lang-java linenums">package ghost;
+
+import java.util.ArrayList;
+
+import processing.core.PApplet;
+import processing.core.PImage;
+
+public abstract class MovableObject{
+
+    private int x;
+    private int y;
+    
+    private PImage sprite;
+
+    private int speed;
+
+    private ArrayList&lt;Wall&gt; walls;
+    private ArrayList&lt;int[]&gt; paths;
+
+    public int[] initialPosition;
+
+    public Direction currentDirection;
+    public Direction nextDirection;
+
+<span class="fc" id="L25">    public MovableObject(int x, int y, PImage sprite) {</span>
+<span class="fc" id="L26">        this.x = x;</span>
+<span class="fc" id="L27">        this.y = y;</span>
+<span class="fc" id="L28">        this.sprite = sprite;</span>
+<span class="fc" id="L29">        this.speed = 0;</span>
+<span class="fc" id="L30">        this.initialPosition = new int[2];</span>
+<span class="fc" id="L31">        this.walls = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L32">        this.paths = new ArrayList&lt;int[]&gt;();</span>
+<span class="fc" id="L33">    }</span>
+
+    public int getX() {
+<span class="fc" id="L36">        return this.x;</span>
+    }
+
+    public void setX(int x) {
+<span class="fc" id="L40">        this.x = x;</span>
+<span class="fc" id="L41">    }</span>
+
+    public int getY() {
+<span class="fc" id="L44">        return this.y;</span>
+    }
+
+    public void setY(int y) {
+<span class="fc" id="L48">        this.y = y;</span>
+<span class="fc" id="L49">    }</span>
+
+    public PImage getSprite() {
+<span class="fc" id="L52">        return this.sprite;</span>
+    }
+
+    public void setSprite(PImage sprite) {
+<span class="fc" id="L56">        this.sprite = sprite;</span>
+<span class="fc" id="L57">    }</span>
+
+    public int getSpeed() {
+<span class="fc" id="L60">        return this.speed;</span>
+    }
+
+    public void setSpeed(int speed) {
+<span class="fc" id="L64">        this.speed = speed;</span>
+<span class="fc" id="L65">    }</span>
+
+    public ArrayList&lt;Wall&gt; getWalls() {
+<span class="fc" id="L68">        return this.walls;</span>
+    }
+
+    public void setWalls(ArrayList&lt;Wall&gt; walls) {
+<span class="fc" id="L72">        this.walls = walls;</span>
+<span class="fc" id="L73">    }</span>
+
+    public ArrayList&lt;int[]&gt; getPaths() {
+<span class="fc" id="L76">        return this.paths;</span>
+    }
+
+    public void setPaths(ArrayList&lt;int[]&gt; paths) {
+<span class="fc" id="L80">        this.paths = paths;</span>
+<span class="fc" id="L81">    }</span>
+
+    public int getWidth() {
+<span class="fc" id="L84">        return this.sprite.width;</span>
+    }
+
+    public int getHeight() {
+<span class="fc" id="L88">        return this.sprite.height;</span>
+    }
+
+    public int[] getInitialPosition() {
+<span class="fc" id="L92">        return this.initialPosition;</span>
+    }
+
+    public void setInitialPosition(int[] initialPosition) {
+<span class="fc" id="L96">        this.initialPosition = initialPosition;</span>
+<span class="fc" id="L97">    }</span>
+
+
+    /**
+     * Make the object back to its initial position.
+     */
+    public void backToInitialPosition() {
+<span class="fc" id="L104">        this.x = this.initialPosition[0];</span>
+<span class="fc" id="L105">        this.y = this.initialPosition[1];</span>
+<span class="fc" id="L106">    }</span>
+
+   
+    /**
+     * Draw the sprite
+     * 
+     * Shift the sprite 4 pixels to leftwards and 4 pixels upwards.
+     * @param app PApplet
+     */
+    public void draw(PApplet app) {
+<span class="fc" id="L116">        app.image(this.sprite, this.x - 4, this.y - 4);</span>
+<span class="fc" id="L117">    }</span>
+
+
+    /**
+     * Reset the current direction as null.
+     */
+    public void resetCurrentDirection() {
+<span class="fc" id="L124">        this.currentDirection = null;</span>
+<span class="fc" id="L125">    }</span>
+
+
+    /**
+     * Reset the next direction as null.
+     */
+    public void resetNextDirection() {
+<span class="fc" id="L132">        this.nextDirection = null;</span>
+<span class="fc" id="L133">    }</span>
+
+
+    /**
+     * Set the current direction to the next direction
+     */
+    public void setCurrentToNext() {
+<span class="fc" id="L140">        this.currentDirection = this.nextDirection;</span>
+<span class="fc" id="L141">    }</span>
+
+
+    /**
+     * Move in the current direction
+     */
+    public void move() {
+<span class="fc bfc" id="L148" title="All 2 branches covered.">        if (this.currentDirection == Direction.UP) {</span>
+<span class="fc" id="L149">            this.y -= this.speed;</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">        } else if (this.currentDirection == Direction.DOWN) {</span>
+<span class="fc" id="L151">            this.y += this.speed;</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">        } else if (this.currentDirection == Direction.LEFT) {</span>
+<span class="fc" id="L153">            this.x -= this.speed;</span>
+<span class="fc bfc" id="L154" title="All 2 branches covered.">        } else if (this.currentDirection == Direction.RIGHT) {</span>
+<span class="fc" id="L155">            this.x += this.speed;</span>
+        }
+<span class="fc" id="L157">    }</span>
+ 
+
+    /**
+     * Check if the object is movable to the given direction.
+     * 
+     * If there is no wall in the given direction, it can move and returns true.
+     * Otherwise, return false;
+     * 
+     * @param direction The direction the object intends to move.
+     * @return true if it is movable. Otherwise, false
+     */
+    public boolean isMovable(Direction direction){
+<span class="fc" id="L170">        boolean hasPath = false;</span>
+<span class="fc" id="L171">        boolean isWall = false;</span>
+
+<span class="fc bfc" id="L173" title="All 2 branches covered.">        for (int[] p : paths) {</span>
+<span class="fc bfc" id="L174" title="All 2 branches covered.">            if (direction == Direction.UP) {</span>
+<span class="fc bfc" id="L175" title="All 4 branches covered.">                if (this.x == p[0] &amp;&amp; this.y - 16 == p[1]) {</span>
+<span class="fc" id="L176">                    hasPath = true;</span>
+<span class="fc" id="L177">                    break;</span>
+                }
+            }
+<span class="fc bfc" id="L180" title="All 2 branches covered.">            else if (direction == Direction.DOWN) {</span>
+<span class="fc bfc" id="L181" title="All 4 branches covered.">                if (this.x == p[0] &amp;&amp; this.y + 16 == p[1]) {</span>
+<span class="fc" id="L182">                    hasPath = true;</span>
+<span class="fc" id="L183">                    break;</span>
+                }
+            }
+<span class="fc bfc" id="L186" title="All 2 branches covered.">            else if (direction == Direction.LEFT) {</span>
+<span class="fc bfc" id="L187" title="All 4 branches covered.">                if (this.x - 16 == p[0] &amp;&amp; this.y == p[1]) {</span>
+<span class="fc" id="L188">                    hasPath = true;</span>
+<span class="fc" id="L189">                    break;</span>
+                }
+            }
+<span class="fc bfc" id="L192" title="All 2 branches covered.">            else if (direction == Direction.RIGHT) {</span>
+<span class="fc bfc" id="L193" title="All 4 branches covered.">                if (this.x + 16 == p[0] &amp;&amp; this.y == p[1]) {</span>
+<span class="fc" id="L194">                    hasPath = true;</span>
+<span class="fc" id="L195">                    break;</span>
+                }
+            }
+<span class="fc" id="L198">        }</span>
+
+        
+<span class="fc bfc" id="L201" title="All 2 branches covered.">        for (Wall w : walls) {</span>
+
+<span class="fc bfc" id="L203" title="All 2 branches covered.">            if (direction == Direction.UP) {</span>
+<span class="fc bfc" id="L204" title="All 2 branches covered.">                if (this.y - 16 == w.getY()) {</span>
+<span class="fc" id="L205">                    isWall = true;</span>
+<span class="fc" id="L206">                    break;</span>
+                }
+            }
+<span class="fc bfc" id="L209" title="All 2 branches covered.">            else if (direction == Direction.DOWN) {</span>
+<span class="fc bfc" id="L210" title="All 2 branches covered.">                if (this.y + 16 == w.getY()) {</span>
+<span class="fc" id="L211">                    isWall = true;</span>
+<span class="fc" id="L212">                    break;</span>
+                }
+            }
+<span class="fc bfc" id="L215" title="All 2 branches covered.">            else if (direction == Direction.LEFT) {</span>
+<span class="fc bfc" id="L216" title="All 2 branches covered.">                if (this.x - 16 == w.getX()) {</span>
+<span class="fc" id="L217">                    isWall = true;</span>
+<span class="fc" id="L218">                    break;</span>
+                }
+            }
+<span class="fc bfc" id="L221" title="All 2 branches covered.">            else if (direction == Direction.RIGHT) {</span>
+<span class="fc bfc" id="L222" title="All 2 branches covered.">                if (this.x + 16 == w.getX()) {</span>
+<span class="fc" id="L223">                    isWall = true;</span>
+<span class="fc" id="L224">                    break;</span>
+                }
+            }
+<span class="fc" id="L227">        }</span>
+
+<span class="fc bfc" id="L229" title="All 4 branches covered.">        return hasPath || !(isWall);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

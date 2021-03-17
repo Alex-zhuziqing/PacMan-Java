@@ -1,0 +1,20 @@
+ghost/MapTest.java
+ ghost.MapTest
+ghost/DirectionTest.java
+ ghost.DirectionTest
+ghost/AmbusherTest.java
+ ghost.AmbusherTest
+ghost/WallTest.java
+ ghost.WallTest
+ghost/WhimTest.java
+ ghost.WhimTest
+ghost/ChaserTest.java
+ ghost.ChaserTest
+ghost/MovableObjectTest.java
+ ghost.MovableObjectTest
+ghost/GameTest.java
+ ghost.GameTest
+ghost/IgnorantTest.java
+ ghost.IgnorantTest
+ghost/AppTest.java
+ ghost.AppTest

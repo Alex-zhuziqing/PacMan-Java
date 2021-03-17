@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Waka.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Milestone</a> &gt; <a href="index.source.html" class="el_package">ghost</a> &gt; <span class="el_source">Waka.java</span></div><h1>Waka.java</h1><pre class="source lang-java linenums">package ghost;
+
+import processing.core.PImage;
+
+public class Waka extends MovableObject{
+
+    private int lives;
+    private boolean isClosed;
+
+   
+    public Waka(int x, int y, PImage sprite) {
+<span class="fc" id="L12">        super(x, y, sprite);</span>
+
+<span class="fc" id="L14">        this.lives = 0;</span>
+<span class="fc" id="L15">        this.isClosed = true;</span>
+<span class="fc" id="L16">    }</span>
+
+   
+    public int getLives() {
+<span class="fc" id="L20">        return this.lives;</span>
+    }
+
+    public void setLives(int lives) {
+<span class="fc" id="L24">        this.lives = lives;</span>
+<span class="fc" id="L25">    }</span>
+
+    public boolean getIsClosed() {
+<span class="fc" id="L28">        return this.isClosed;</span>
+    }
+
+    public void setIsClosed(boolean isClosed) {
+<span class="fc" id="L32">        this.isClosed = isClosed;</span>
+<span class="fc" id="L33">    }</span>
+
+
+    /**
+     * Reverse the boolean isClosed.
+     * &lt;p&gt; If it is true, it becomes false;
+     * if it is false, it becomes true.
+     */
+    public void reverseIsClosed() {
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        if (this.isClosed) {</span>
+<span class="fc" id="L43">            this.isClosed = false;</span>
+        } else {
+<span class="fc" id="L45">            this.isClosed = true;</span>
+        }
+<span class="fc" id="L47">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

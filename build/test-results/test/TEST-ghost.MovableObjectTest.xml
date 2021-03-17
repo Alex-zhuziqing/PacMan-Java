@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ghost.MovableObjectTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2020-11-22T04:33:07" hostname="192-168-1-126.tpgi.com.au" time="1.948">
+  <properties/>
+  <testcase name="testMovableObject_draw()" classname="ghost.MovableObjectTest" time="1.565"/>
+  <testcase name="testMovableObject_move()" classname="ghost.MovableObjectTest" time="0.001"/>
+  <testcase name="testMovableObject_getSpeed_setSpeed()" classname="ghost.MovableObjectTest" time="0.001"/>
+  <testcase name="testMovableObject_getInitialPosition_setInitialPosition()" classname="ghost.MovableObjectTest" time="0.0"/>
+  <testcase name="testMovableObject_getSprite_setSprite()" classname="ghost.MovableObjectTest" time="0.181"/>
+  <testcase name="testMovableObject_backToInitialPosition()" classname="ghost.MovableObjectTest" time="0.0"/>
+  <testcase name="testMovableObject_getWalls_setWalls()" classname="ghost.MovableObjectTest" time="0.0"/>
+  <testcase name="testMovableObject_isMovable()" classname="ghost.MovableObjectTest" time="0.001"/>
+  <testcase name="testMovableObject_getX_setX()" classname="ghost.MovableObjectTest" time="0.0"/>
+  <testcase name="testMovableObject_getY_setY()" classname="ghost.MovableObjectTest" time="0.0"/>
+  <testcase name="testMovableObject_resetCurrentDirection()" classname="ghost.MovableObjectTest" time="0.001"/>
+  <testcase name="testMovableObject_getWidth_getHeight()" classname="ghost.MovableObjectTest" time="0.187"/>
+  <testcase name="testMovableObject_getPaths_setPaths()" classname="ghost.MovableObjectTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

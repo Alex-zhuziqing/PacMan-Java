@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Whim.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Milestone</a> &gt; <a href="index.source.html" class="el_package">ghost</a> &gt; <span class="el_source">Whim.java</span></div><h1>Whim.java</h1><pre class="source lang-java linenums">package ghost;
+
+import processing.core.PImage;
+
+import java.util.ArrayList;
+
+public class Whim extends Ghost{
+
+    public ArrayList&lt;Chaser&gt; chasers;
+
+    public Whim(int x, int y, PImage sprite) {
+<span class="fc" id="L12">        super(x, y, sprite);</span>
+<span class="fc" id="L13">    }</span>
+
+
+    /**
+     * Set Whim's next moving direction when in SCATTER mode.
+     * 
+     * &lt;p&gt; The target location is bottom right corner.
+     * 
+     * @param isDebug Indicates if the app is in DEBUG mode
+     */
+    public void setScatterDirection(boolean isDebug) {
+<span class="fc" id="L24">        this.resetNextDirection();</span>
+<span class="fc" id="L25">        this.setNextDirection(448, 576);</span>
+
+<span class="pc bpc" id="L27" title="3 of 4 branches missed.">        if (isDebug &amp;&amp; !(this.isRemoved)) {</span>
+<span class="nc" id="L28">            this.app.stroke(255, 255, 255);</span>
+<span class="nc" id="L29">            this.app.line(this.getX(), this.getY(), 448, 576);</span>
+        }
+<span class="fc" id="L31">    }</span>
+
+
+    /**
+     * Set Whim's next moving direction when in CHASE mode.
+     * 
+     * &lt;p&gt; The target location is double the vector from Chaser to 2 grid spaces (2 * 16) ahead of Waka
+     * If there is no Chaser present in the grid, then switch to SCATTER mode until a Chaser is restored.
+     * 
+     * @param isDebug (boolean) Indicates if the app is in DEBUG mode
+     */
+    public void setChaseDirection(boolean isDebug) {
+
+        // If there is no chaser present in the map, then switch to SCATTER mode
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        if (this.chasers.size() == 0) {</span>
+<span class="fc" id="L46">            this.setScatterDirection(isDebug);</span>
+<span class="fc" id="L47">            return;</span>
+        }
+
+<span class="fc" id="L50">        this.resetNextDirection();</span>
+
+        // Take the first chaser from chasers list
+<span class="fc" id="L53">        Chaser chaser = this.chasers.get(0);</span>
+
+<span class="fc" id="L55">        int xIncrement = 0;</span>
+<span class="fc" id="L56">        int yIncrement = 0;</span>
+
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (this.getWaka().currentDirection == Direction.UP) {</span>
+<span class="fc" id="L59">            yIncrement = - 2 * 16;</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        } else if (this.getWaka().currentDirection == Direction.DOWN) {</span>
+<span class="fc" id="L61">            yIncrement = 2 * 16;</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        } else if (this.getWaka().currentDirection == Direction.LEFT) {</span>
+<span class="fc" id="L63">            xIncrement = - 2 * 16;</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        } else if (this.getWaka().currentDirection ==  Direction.RIGHT) {</span>
+<span class="fc" id="L65">            xIncrement = 2 * 16;</span>
+        }
+
+<span class="fc" id="L68">        int newX = chaser.getX() + (this.getWaka().getX() + xIncrement - chaser.getX()) * 2;</span>
+<span class="fc" id="L69">        int newY = chaser.getY() + (this.getWaka().getY() + yIncrement - chaser.getY()) * 2;</span>
+
+        // In cases where the target location is outside the bounds of the grid, the closest point is used.
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        if (newX &lt; 0) {</span>
+<span class="fc" id="L73">            newX = 0;</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        } if (newX &gt; 448) {</span>
+<span class="fc" id="L75">            newX = 448;</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        } if (newY &lt; 0) {</span>
+<span class="fc" id="L77">            newY = 0;</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        } if (newY &gt; 576) {</span>
+<span class="fc" id="L79">            newY = 576;</span>
+        }
+
+<span class="fc" id="L82">        setNextDirection(newX, newY);</span>
+
+<span class="pc bpc" id="L84" title="3 of 4 branches missed.">        if (isDebug &amp;&amp; !(this.isRemoved)) {</span>
+<span class="nc" id="L85">            this.app.stroke(255, 255, 255);</span>
+<span class="nc" id="L86">            this.app.line(this.getX(), this.getY(), newX, newY);</span>
+        }
+<span class="fc" id="L88">    }</span>
+
+
+    /**
+     * Handle the logic of Whim's movement.
+     * 
+     * It behaves differently in different modes. 
+     * It can only move if there is no wall in its direction of moving
+     * 
+     * @param game Game object
+     */
+    public static void handleMovement(Game game) {
+<span class="fc bfc" id="L100" title="All 2 branches covered.">        for (Whim whim : game.whims){</span>
+
+<span class="fc bfc" id="L102" title="All 2 branches covered.">            if (game.mode == Mode.SCATTER){</span>
+<span class="fc" id="L103">                whim.setScatterDirection(game.isDebug);</span>
+            }
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">            else if (game.mode == Mode.CHASE) {</span>
+<span class="fc" id="L106">                whim.setChaseDirection(game.isDebug);</span>
+            }
+
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">            if (whim.isMovable(whim.nextDirection)) {</span>
+<span class="fc" id="L110">                whim.setCurrentToNext();</span>
+            } 
+    
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">            if (whim.isMovable(whim.currentDirection)) {</span>
+<span class="fc" id="L114">                whim.move();</span>
+            }
+<span class="fc" id="L116">        }</span>
+<span class="fc" id="L117">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Ambusher.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Milestone</a> &gt; <a href="index.source.html" class="el_package">ghost</a> &gt; <span class="el_source">Ambusher.java</span></div><h1>Ambusher.java</h1><pre class="source lang-java linenums">package ghost;
+
+
+import processing.core.PImage;
+
+
+public class Ambusher extends Ghost{
+
+    public Ambusher(int x, int y, PImage sprite) {
+<span class="fc" id="L10">        super(x, y, sprite);</span>
+<span class="fc" id="L11">    }</span>
+
+
+    /**
+     * Set Ambusher's next moving direction when in SCATTER mode.
+     * 
+     * &lt;p&gt; The target location is top right corner.
+     * 
+     * @param isDebug Indicates if the app is in DEBUG mode
+     */
+    public void setScatterDirection(boolean isDebug) {
+<span class="fc" id="L22">        this.resetNextDirection();</span>
+<span class="fc" id="L23">        this.setNextDirection(448, 0);</span>
+
+<span class="pc bpc" id="L25" title="3 of 4 branches missed.">        if (isDebug &amp;&amp; !(this.isRemoved)) {</span>
+<span class="nc" id="L26">            this.app.stroke(255, 255, 255);</span>
+<span class="nc" id="L27">            this.app.line(this.getX(), this.getY(), 448, 0);</span>
+        }
+<span class="fc" id="L29">    }</span>
+
+    
+    /**
+     * Set Ambusher's next moving direction when in CHASE mode.
+     * 
+     * &lt;p&gt; The target location is four grid spaces ahead of Waka (4 * 16 pixels) (based on Waka’s current direction).
+     * 
+     * @param isDebug Indicates if the app is in DEBUG mode
+     */
+    public void setChaseDirection(boolean isDebug) {
+
+<span class="fc" id="L41">        int nextX = this.getWaka().getX();</span>
+<span class="fc" id="L42">        int nextY = this.getWaka().getY();</span>
+
+<span class="fc" id="L44">        this.resetNextDirection();</span>
+
+
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (this.getWaka().currentDirection == Direction.UP) {</span>
+<span class="fc" id="L48">            nextY -= 64;</span>
+        }
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        else if (this.getWaka().currentDirection == Direction.DOWN) {</span>
+<span class="fc" id="L51">            nextY += 64;</span>
+        }
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        else if (this.getWaka().currentDirection == Direction.LEFT) {</span>
+<span class="fc" id="L54">            nextX -= 64;</span>
+        }
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        else if (this.getWaka().currentDirection == Direction.RIGHT) {</span>
+<span class="fc" id="L57">            nextX += 64;</span>
+        }
+
+<span class="fc" id="L60">        setNextDirection(nextX, nextY);</span>
+
+<span class="pc bpc" id="L62" title="3 of 4 branches missed.">        if (isDebug &amp;&amp; !(this.isRemoved)) {</span>
+<span class="nc" id="L63">            this.app.stroke(255, 255, 255);</span>
+<span class="nc" id="L64">            this.app.line(this.getX(), this.getY(), nextX, nextY);</span>
+        }
+<span class="fc" id="L66">    }</span>
+
+
+    /**
+     * Handle the logic of Ambusher's movement.
+     * 
+     * It behaves differently in different modes. 
+     * It can only move if there is no wall in its direction of moving
+     * 
+     * @param game Game object
+     */
+    public static void handleMovement(Game game) {
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        for (Ambusher ambusher : game.ambushers){</span>
+
+<span class="fc bfc" id="L80" title="All 2 branches covered.">            if (game.mode == Mode.SCATTER){</span>
+<span class="fc" id="L81">                ambusher.setScatterDirection(game.isDebug);</span>
+            }   
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">            else if (game.mode == Mode.CHASE) {</span>
+<span class="fc" id="L84">                ambusher.setChaseDirection(game.isDebug);</span>
+            }
+
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">            if (ambusher.isMovable(ambusher.nextDirection)) {</span>
+<span class="fc" id="L88">                ambusher.setCurrentToNext();</span>
+            } 
+    
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">            if (ambusher.isMovable(ambusher.currentDirection)) {</span>
+<span class="fc" id="L92">                ambusher.move();</span>
+            }
+<span class="fc" id="L94">        }</span>
+<span class="fc" id="L95">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

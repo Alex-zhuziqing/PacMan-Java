@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Ghost.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Milestone</a> &gt; <a href="index.source.html" class="el_package">ghost</a> &gt; <span class="el_source">Ghost.java</span></div><h1>Ghost.java</h1><pre class="source lang-java linenums">package ghost;
+
+import processing.core.PApplet;
+import processing.core.PImage;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import java.util.Random;
+import java.lang.Math;
+
+public class Ghost extends MovableObject{
+
+    private Waka waka;
+
+    /**
+     * If the ghost is eaten by Waka in FRIGHTENED mode, then isEaten is true
+     */
+    public boolean isRemoved;
+
+    public PApplet app;
+
+    public Ghost(int x, int y, PImage sprite) {
+<span class="fc" id="L24">        super(x, y, sprite);</span>
+<span class="fc" id="L25">        this.isRemoved = false;</span>
+<span class="fc" id="L26">    }</span>
+
+    public Waka getWaka() {
+<span class="fc" id="L29">        return this.waka;</span>
+    }
+    
+    public void setWaka(Waka waka) {
+<span class="fc" id="L33">        this.waka = waka;</span>
+<span class="fc" id="L34">    }</span>
+
+
+    /**
+     * Determine the direction in which the ghost moves will produce shortest straight-line distance and set the 
+     * next moving direction to it.
+     * 
+     * Note: The ghost will not move to the direction that is opposed to the direction it is currently moving.
+     * @param targetX The x-coordinate of the target location
+     * @param targetY The y-coordinate of the target location
+     */
+    public void setNextDirection(int targetX, int targetY) {
+
+<span class="fc" id="L47">        Direction result  = null;</span>
+<span class="fc" id="L48">        double minDistance = 1000.0;</span>
+<span class="fc" id="L49">        int speed = this.getSpeed();</span>
+
+<span class="fc" id="L51">        ArrayList&lt;Direction&gt; movableDirection = new ArrayList&lt;&gt;(Arrays.asList</span>
+<span class="fc" id="L52">        (</span>
+        Direction.UP,
+        Direction.DOWN,
+        Direction.LEFT,
+        Direction.RIGHT)
+        );
+
+        // If the ghost is currently moving upwards, or there is a wall downwards, then it can not move downwards.
+<span class="fc bfc" id="L60" title="All 4 branches covered.">        if (this.currentDirection == Direction.UP || !(this.isMovable(Direction.DOWN))) {</span>
+<span class="fc" id="L61">            movableDirection.remove(Direction.DOWN);</span>
+        } 
+        // If the ghost is currently moving downwards, or there is a wall upwards, then it can not move upwards.
+<span class="fc bfc" id="L64" title="All 4 branches covered.">        if (this.currentDirection == Direction.DOWN || !(this.isMovable(Direction.UP))) {</span>
+<span class="fc" id="L65">            movableDirection.remove(Direction.UP);</span>
+        } 
+        // If the ghost is currently moving leftwards, or there is a wall rightwards, then it can not move rightwards.
+<span class="fc bfc" id="L68" title="All 4 branches covered.">        if (this.currentDirection == Direction.LEFT || !(this.isMovable(Direction.RIGHT))) {</span>
+<span class="fc" id="L69">            movableDirection.remove(Direction.RIGHT);</span>
+        }
+        // If the ghost is currently moving rightwards, or there is a wall leftwards, then it can not move rightwards.
+<span class="fc bfc" id="L72" title="All 4 branches covered.">        if (this.currentDirection == Direction.RIGHT || !(this.isMovable(Direction.LEFT))) {</span>
+<span class="fc" id="L73">            movableDirection.remove(Direction.LEFT);</span>
+        }
+
+        
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        for (Direction direction : movableDirection) {</span>
+            
+<span class="fc bfc" id="L79" title="All 2 branches covered.">            if (direction == Direction.UP) {</span>
+<span class="fc" id="L80">                int nextUpY =  this.getY() - speed;</span>
+<span class="fc" id="L81">                double upDistance = Math.sqrt(Math.pow(targetX - this.getX(), 2) + Math.pow(targetY - nextUpY, 2));</span>
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">                if (upDistance &lt; minDistance) {</span>
+<span class="fc" id="L83">                    minDistance = upDistance;</span>
+<span class="fc" id="L84">                    result = Direction.UP;</span>
+                }
+            }
+    
+<span class="fc bfc" id="L88" title="All 2 branches covered.">            if (direction == Direction.DOWN) {</span>
+<span class="fc" id="L89">                int nextDownY = this.getY() + speed;</span>
+<span class="fc" id="L90">                double downDistance = Math.sqrt(Math.pow(targetX - this.getX(), 2) + Math.pow(targetY - nextDownY, 2));</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">                if (downDistance &lt; minDistance) {</span>
+<span class="fc" id="L92">                    minDistance = downDistance;</span>
+<span class="fc" id="L93">                    result = Direction.DOWN;</span>
+                }
+            }
+    
+<span class="fc bfc" id="L97" title="All 2 branches covered.">            if (direction == Direction.LEFT) {</span>
+<span class="fc" id="L98">                int nextLeftX = this.getX() - speed;</span>
+<span class="fc" id="L99">                double leftDistance = Math.sqrt(Math.pow(targetX - nextLeftX, 2) + Math.pow(targetY - this.getY(), 2));</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">                if (leftDistance &lt; minDistance) {</span>
+<span class="fc" id="L101">                    minDistance = leftDistance;</span>
+<span class="fc" id="L102">                    result = Direction.LEFT;</span>
+                }
+            }
+    
+<span class="fc bfc" id="L106" title="All 2 branches covered.">            if (direction == Direction.RIGHT) {</span>
+<span class="fc" id="L107">                int nextRightX = this.getX() + speed;</span>
+<span class="fc" id="L108">                double rightDistance = Math.sqrt(Math.pow(targetX - nextRightX, 2) + Math.pow(targetY - this.getY(), 2));</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">                if (rightDistance &lt; minDistance) {</span>
+<span class="fc" id="L110">                    minDistance = rightDistance;</span>
+<span class="fc" id="L111">                    result = Direction.RIGHT;</span>
+                }
+            }
+<span class="fc" id="L114">        }</span>
+
+<span class="fc" id="L116">       this.nextDirection = result;</span>
+<span class="fc" id="L117">    }</span>
+
+
+    /**
+     * Manage the movement of ghosts in FRIGHTENED mode.
+     * 
+     * &lt;p&gt; The ghosts move randomly when they are in FRIGHTENED mode,
+     * they only go back when they have no other options.
+     */ 
+    public static void moveFrightenedGhost(Game game) {
+    
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        for (Ghost ghost : game.ghosts) {</span>
+
+<span class="fc" id="L130">            ArrayList&lt;Direction&gt; availableDirection = new ArrayList&lt;&gt;();</span>
+
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">            if (ghost.isMovable(Direction.UP)) {</span>
+<span class="fc" id="L133">                availableDirection.add(Direction.UP);</span>
+            } 
+<span class="pc bpc" id="L135" title="1 of 2 branches missed.">            if (ghost.isMovable(Direction.DOWN)) {</span>
+<span class="fc" id="L136">                availableDirection.add(Direction.DOWN);</span>
+            }
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">            if (ghost.isMovable(Direction.LEFT)) {</span>
+<span class="fc" id="L139">                availableDirection.add(Direction.LEFT);</span>
+            }
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">            if (ghost.isMovable(Direction.RIGHT)) {</span>
+<span class="fc" id="L142">                availableDirection.add(Direction.RIGHT);</span>
+            } 
+
+            
+            while (true) {
+<span class="fc" id="L147">                Random random = new Random();</span>
+                // randomly generate a number int the range [-2, 2]
+<span class="fc" id="L149">                int nextDirectionInt = random.nextInt(5) - 2;</span>
+
+<span class="fc" id="L151">                Direction nextDirection = Direction.convertIndexToDirection(nextDirectionInt);</span>
+
+                // If the number generated is 0 or the number is not in the availableDirection list, 
+                // then generate again.
+<span class="pc bpc" id="L155" title="2 of 4 branches missed.">                if (nextDirection == null || !(availableDirection.contains(nextDirection))) {</span>
+<span class="nc" id="L156">                    continue;</span>
+                }
+
+                // If nextDirection is the opposite of the current direction, and
+                // there are more than one available directions (this means the nextDirection is not the 
+                // only one option), then generate again.
+<span class="pc bpc" id="L162" title="3 of 4 branches missed.">                if (nextDirection.getIndex() == -ghost.currentDirection.getIndex() &amp;&amp; availableDirection.size() != 1) {</span>
+<span class="nc" id="L163">                    continue;</span>
+                }
+
+<span class="fc" id="L166">                ghost.resetNextDirection();</span>
+                
+<span class="fc" id="L168">                ghost.nextDirection = nextDirection;</span>
+
+<span class="fc" id="L170">                ghost.setCurrentToNext();</span>
+<span class="fc" id="L171">                ghost.move();</span>
+<span class="fc" id="L172">                break;</span>
+            
+            }
+<span class="fc" id="L175">        }            </span>
+<span class="fc" id="L176">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

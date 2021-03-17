@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ghost.GameTest" tests="17" skipped="0" failures="0" errors="0" timestamp="2020-11-22T04:33:00" hostname="192-168-1-126.tpgi.com.au" time="6.315">
+  <properties/>
+  <testcase name="testGame_drawGhosts_FRIGHTENED()" classname="ghost.GameTest" time="0.708"/>
+  <testcase name="testGame_displayLoseScreen()" classname="ghost.GameTest" time="1.059"/>
+  <testcase name="testGame_handleGameEnd()" classname="ghost.GameTest" time="0.067"/>
+  <testcase name="testGame_manageModes_increaseCounter()" classname="ghost.GameTest" time="0.004"/>
+  <testcase name="testGame_restartGame()" classname="ghost.GameTest" time="0.096"/>
+  <testcase name="testGame_drawWaka()" classname="ghost.GameTest" time="0.111"/>
+  <testcase name="testGame_eatFruit()" classname="ghost.GameTest" time="0.008"/>
+  <testcase name="testGame_checkCollision_FRIGHTENED()" classname="ghost.GameTest" time="0.11"/>
+  <testcase name="testGame_manageModes_switchingModes()" classname="ghost.GameTest" time="0.001"/>
+  <testcase name="testGame_displayWinScreen()" classname="ghost.GameTest" time="1.112"/>
+  <testcase name="testGame_manageModes_restart()" classname="ghost.GameTest" time="0.002"/>
+  <testcase name="testGame_manageGameFlow_frightenedMovement()" classname="ghost.GameTest" time="0.191"/>
+  <testcase name="testGame_isCollectAllFruits()" classname="ghost.GameTest" time="0.001"/>
+  <testcase name="testGame_isFrightenedEnd()" classname="ghost.GameTest" time="0.043"/>
+  <testcase name="testGame_manageGameFlow_winningAndLosing()" classname="ghost.GameTest" time="0.859"/>
+  <testcase name="testGame_checkCollision()" classname="ghost.GameTest" time="1.213"/>
+  <testcase name="testGame_drawFruits()" classname="ghost.GameTest" time="0.716"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

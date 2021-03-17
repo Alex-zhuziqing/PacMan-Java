@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Trial.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Milestone</a> &gt; <a href="index.source.html" class="el_package">ghost</a> &gt; <span class="el_source">Trial.java</span></div><h1>Trial.java</h1><pre class="source lang-java linenums">package ghost;
+import processing.core.PApplet;
+import processing.core.PImage;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+ 
+import java.io.FileReader;
+import java.util.Iterator;
+
+import java.util.*;
+
+import java.lang.Math;
+
+
+/**
+ * @author Alex
+ * @since 1987
+ */
+<span class="nc" id="L20">public class Trial {</span>
+
+        
+    public void keyPressed() {
+<span class="nc" id="L24">            System.out.println(&quot;pressed&quot;);</span>
+<span class="nc" id="L25">    }</span>
+
+    public static void main(String[] args) {
+
+
+<span class="nc" id="L30">        ArrayList&lt;String&gt; list = new ArrayList&lt;&gt;(Arrays.asList(&quot;a&quot;, &quot;b&quot;));</span>
+<span class="nc bnc" id="L31" title="All 2 branches missed.">        if (list.contains(null)) {</span>
+<span class="nc" id="L32">            System.out.println(&quot;yes&quot;);</span>
+        } else {
+<span class="nc" id="L34">            System.out.println(&quot;no&quot;);</span>
+        }
+
+
+        // App app = new App();
+        // PApplet.runSketch(new String[]{&quot;test&quot;}, app);
+        // MovableObject waka = new Waka(1, 1, app.loadImage(&quot;src/main/resources/playerClosed.png&quot;));
+        // System.out.println(waka.getWidth());
+        // System.out.println(waka.getHeight());
+
+<span class="nc" id="L44">        System.out.println(&quot;num:&quot; + 0 % 60);</span>
+
+
+        
+        
+<span class="nc" id="L49">}</span>
+}
+
+interface Info {
+    // 省略了 public abstract
+    void show();
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ghost.WhimTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2020-11-22T04:33:09" hostname="192-168-1-126.tpgi.com.au" time="0.003">
+  <properties/>
+  <testcase name="testWhim_setChaseDirection()" classname="ghost.WhimTest" time="0.001"/>
+  <testcase name="testWhim_handleMovement_CHASE()" classname="ghost.WhimTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

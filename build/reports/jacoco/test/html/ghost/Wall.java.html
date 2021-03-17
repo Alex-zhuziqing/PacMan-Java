@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Wall.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Milestone</a> &gt; <a href="index.source.html" class="el_package">ghost</a> &gt; <span class="el_source">Wall.java</span></div><h1>Wall.java</h1><pre class="source lang-java linenums">package ghost;
+
+import processing.core.PApplet;
+import processing.core.PImage;
+
+public class Wall{
+
+    private int x;
+    private int y;
+
+    private PImage sprite;
+
+    public boolean isEmpty;
+
+<span class="fc" id="L15">    public Wall() {</span>
+<span class="fc" id="L16">        this.isEmpty = true;</span>
+<span class="fc" id="L17">    }</span>
+
+<span class="fc" id="L19">    public Wall(int x, int y, PImage sprite) {</span>
+<span class="fc" id="L20">        this.x = x;</span>
+<span class="fc" id="L21">        this.y = y;</span>
+<span class="fc" id="L22">        this.sprite = sprite;</span>
+<span class="fc" id="L23">        this.isEmpty = false;</span>
+<span class="fc" id="L24">    }</span>
+
+    public int getX() {
+<span class="fc" id="L27">        return this.x;</span>
+    }
+
+    public int getY() {
+<span class="fc" id="L31">        return this.y;</span>
+    }
+    
+    public int getWidth() {
+<span class="fc" id="L35">        return this.sprite.width;</span>
+    }
+
+    public int getHeight() {
+<span class="fc" id="L39">        return this.sprite.height;</span>
+    }
+
+    
+    /**
+     * Draw the sprite
+     * 
+     * @param app PApplet
+     */
+    public void draw(PApplet app) {
+<span class="fc" id="L49">        app.image(this.sprite, this.x, this.y);</span>
+<span class="fc" id="L50">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

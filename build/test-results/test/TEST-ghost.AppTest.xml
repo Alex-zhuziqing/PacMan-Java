@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ghost.AppTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2020-11-22T04:33:00" hostname="192-168-1-126.tpgi.com.au" time="0.01">
+  <properties/>
+  <testcase name="testApp_constructor()" classname="ghost.AppTest" time="0.008"/>
+  <testcase name="testApp_keyPressed()" classname="ghost.AppTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

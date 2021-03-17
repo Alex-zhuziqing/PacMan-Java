@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Chaser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Milestone</a> &gt; <a href="index.source.html" class="el_package">ghost</a> &gt; <span class="el_source">Chaser.java</span></div><h1>Chaser.java</h1><pre class="source lang-java linenums">package ghost;
+
+import processing.core.PImage;
+
+
+public class Chaser extends Ghost{
+
+    public Chaser(int x, int y, PImage sprite) {
+<span class="fc" id="L9">        super(x, y, sprite);</span>
+<span class="fc" id="L10">    }</span>
+
+
+    /**
+     * Set Chaser's next moving direction when in SCATTER mode.
+     * 
+     * &lt;p&gt; The target location is top left corner.
+     * 
+     * @param isDebug Indicates if the app is in DEBUG mode
+     */
+    public void setScatterDirection(boolean isDebug) {
+<span class="fc" id="L21">        this.resetNextDirection();</span>
+<span class="fc" id="L22">        this.setNextDirection(0, 0);</span>
+
+<span class="pc bpc" id="L24" title="3 of 4 branches missed.">        if (isDebug &amp;&amp; !(this.isRemoved)) {</span>
+<span class="nc" id="L25">            this.app.stroke(255, 255, 255);</span>
+<span class="nc" id="L26">            this.app.line(this.getX(), this.getY(), 0, 0);</span>
+        }
+<span class="fc" id="L28">    }</span>
+
+
+    /**
+     * Set Chaser's next moving direction when in CHASE mode.
+     * 
+     * &lt;p&gt; The target location is waka's postion.
+     * 
+     * @param isDebug (boolean) Indicates if the app is in DEBUG mode
+     */
+    public void setChaseDirection(boolean isDebug) {
+<span class="fc" id="L39">        this.resetNextDirection();</span>
+<span class="fc" id="L40">        setNextDirection(this.getWaka().getX(), this.getWaka().getY());</span>
+
+<span class="pc bpc" id="L42" title="3 of 4 branches missed.">        if (isDebug &amp;&amp; !(this.isRemoved)) {</span>
+<span class="nc" id="L43">            this.app.stroke(255, 255, 255);</span>
+<span class="nc" id="L44">            this.app.line(this.getX(), this.getY(), this.getWaka().getX(), this.getWaka().getY());</span>
+        }
+<span class="fc" id="L46">    }</span>
+
+
+    /**
+     * Handle the logic of Chaser's movement.
+     * 
+     * It behaves differently in different modes. 
+     * It can only move if there is no wall in its direction of moving
+     * 
+     * @param game Game object
+     */
+    public static void handleMovement(Game game) {
+
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        for (Chaser chaser : game.chasers){</span>
+
+<span class="fc bfc" id="L61" title="All 2 branches covered.">            if (game.mode == Mode.SCATTER){</span>
+<span class="fc" id="L62">                chaser.setScatterDirection(game.isDebug);</span>
+            }
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">            else if (game.mode == Mode.CHASE) {</span>
+<span class="fc" id="L65">                chaser.setChaseDirection(game.isDebug);</span>
+            }
+
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">            if (chaser.isMovable(chaser.nextDirection)) {</span>
+<span class="fc" id="L69">                chaser.setCurrentToNext();</span>
+            } 
+    
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">            if (chaser.isMovable(chaser.currentDirection)) {</span>
+<span class="fc" id="L73">                chaser.move();</span>
+            }
+<span class="fc" id="L75">        }</span>
+
+<span class="fc" id="L77">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

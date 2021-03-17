@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Game.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Milestone</a> &gt; <a href="index.source.html" class="el_package">ghost</a> &gt; <span class="el_source">Game.java</span></div><h1>Game.java</h1><pre class="source lang-java linenums">package ghost;
+
+import java.util.ArrayList;
+
+public class Game {
+    public App app;
+
+    public Waka waka;
+    public int wakaLives;
+
+    public Map map;
+
+    /**
+     * A general list that stores all ghosts
+     */
+    public ArrayList&lt;Ghost&gt; ghosts;
+    
+    // store the 4 types of ghosts separately
+    public ArrayList&lt;Ambusher&gt; ambushers;
+    public ArrayList&lt;Chaser&gt; chasers;
+    public ArrayList&lt;Ignorant&gt; ignorants;
+    public ArrayList&lt;Whim&gt; whims;
+
+    /**
+     * store all fruits in the grid
+     */
+    public ArrayList&lt;Fruit&gt; fruits;
+
+    /**
+     * store all walls in the grid
+     */
+    public ArrayList&lt;Wall&gt; walls;
+
+    public Mode mode;
+    public Mode lastMode;
+
+    /**
+     * If the app is in DEBUG mode, isDebug is true, otherwise false.
+     */
+    public boolean isDebug;
+
+    /**
+     * Count for modes.
+     * &lt;P&gt; Even number for SCATTER mode, odd number for CHASE mode
+     */
+    private int modeCounter;
+
+    private boolean isWon;
+    private boolean isLost;
+
+    public ArrayList&lt;Integer&gt; modeLength;
+    public int frightenedLength;
+
+    /**
+     * store the start time of FRIGHTENED mode 
+     */
+    private int frightenedStartTime;
+
+    /**
+     * The time that the game has run
+     */
+    private int timeElapsed;
+
+    /**
+     * The start time of the previous mode
+     */
+    //private int prevModeStartTime;
+
+    private int modeTimeCounter;
+
+    /**
+     * Count for restart time (10 seconds)
+     */
+    private int gameOverTime;
+
+   /**
+    * store the path (in the form of a coordinate (x, y))
+    * that Waka can travel through (all elements except for walls)
+    */
+    public ArrayList&lt;int[]&gt; paths;
+
+    /**
+     * count for the number of frames 
+     */
+    private int frameCounter;
+
+
+<span class="fc" id="L88">    public Game(App app) {</span>
+
+<span class="fc" id="L90">        this.app = app;</span>
+
+<span class="fc" id="L92">        this.waka = new Waka(0, 0, null);</span>
+<span class="fc" id="L93">        this.wakaLives = 0;</span>
+
+<span class="fc" id="L95">        this.ghosts = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L96">        this.ambushers = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L97">        this.chasers = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L98">        this.ignorants = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L99">        this.whims = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L101">        this.fruits = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L103">        this.isWon = false;</span>
+<span class="fc" id="L104">        this.isLost = false;</span>
+
+<span class="fc" id="L106">        this.mode = Mode.SCATTER;</span>
+<span class="fc" id="L107">        this.lastMode = Mode.SCATTER;</span>
+<span class="fc" id="L108">        this.modeCounter = 0;</span>
+
+<span class="fc" id="L110">        this.isDebug = false;</span>
+
+<span class="fc" id="L112">        this.timeElapsed = this.app.time / 1000;</span>
+<span class="fc" id="L113">        this.modeTimeCounter = 0;</span>
+
+<span class="fc" id="L115">        this.gameOverTime = 0;</span>
+<span class="fc" id="L116">        this.modeLength = new ArrayList&lt;Integer&gt;();</span>
+<span class="fc" id="L117">        this.frightenedLength = 0;</span>
+<span class="fc" id="L118">        this.frightenedStartTime = 0;</span>
+
+<span class="fc" id="L120">        this.map = new Map(this);</span>
+
+<span class="fc" id="L122">        this.walls = new ArrayList&lt;Wall&gt;();</span>
+<span class="fc" id="L123">        this.paths = new ArrayList&lt;int[]&gt;();</span>
+
+<span class="fc" id="L125">        this.frameCounter = 0;</span>
+<span class="fc" id="L126">    }</span>
+
+    public boolean getIsWon() {
+<span class="fc" id="L129">        return this.isWon;</span>
+    }
+
+    public boolean getIsLost() {
+<span class="fc" id="L133">        return this.isLost;</span>
+    }
+
+    public void setIsWon(boolean isWon) {
+<span class="fc" id="L137">        this.isWon = isWon;</span>
+<span class="fc" id="L138">    }</span>
+
+    public void setIsLost(boolean isLost) {
+<span class="fc" id="L141">        this.isLost = isLost;</span>
+<span class="fc" id="L142">    }</span>
+
+    public void setFrightenedStartTime(int time) {
+<span class="fc" id="L145">        this.frightenedStartTime = time;</span>
+<span class="fc" id="L146">    }</span>
+
+    public void setTimeElapsed(int timeElapsed) {
+<span class="fc" id="L149">        this.timeElapsed = timeElapsed;</span>
+<span class="fc" id="L150">    }</span>
+
+    public int getModeCounter() {
+<span class="fc" id="L153">        return this.modeCounter;</span>
+    }
+
+    public void setModeCounter(int modeCounter) {
+<span class="fc" id="L157">        this.modeCounter = modeCounter;</span>
+<span class="fc" id="L158">    }</span>
+
+    public int getModeTimeCounter() {
+<span class="fc" id="L161">        return this.modeTimeCounter;</span>
+    }
+
+    public void setModeTimeCounter(int modeTimeCounter) {
+<span class="fc" id="L165">        this.modeTimeCounter = modeTimeCounter;</span>
+<span class="fc" id="L166">    }</span>
+
+    public void setFrameCounter(int frameCounter) {
+<span class="fc" id="L169">        this.frameCounter = frameCounter;</span>
+<span class="fc" id="L170">    }</span>
+
+    public void setGameOverTime(int time) {
+<span class="fc" id="L173">        this.gameOverTime = time;</span>
+<span class="fc" id="L174">    }</span>
+
+
+    /**
+     * Manage the overall game flow.
+     * 
+     * &lt;p&gt; This is the main method of the Game class. It manages the overall game flow including
+     * the movement of Waka, the movement of ghosts, the collision between Waka and ghosts,
+     * eating fruits of Waka, switching modes, timing the game and winning or losing of the game. 
+     */
+    public void manageGameFlow() {
+
+<span class="fc" id="L186">        this.timeElapsed = this.app.time / 1000;</span>
+
+<span class="pc bpc" id="L188" title="1 of 4 branches missed.">        if (this.isWon || this.isLost){</span>
+<span class="fc" id="L189">            this.handleGameEnd();</span>
+        }
+
+        else {
+
+            // win the game
+<span class="fc bfc" id="L195" title="All 2 branches covered.">            if (this.isCollectAllFruits()) {</span>
+<span class="fc" id="L196">                this.gameOverTime = this.timeElapsed;</span>
+<span class="fc" id="L197">                this.isWon = true;</span>
+            }
+            
+            // lose the game
+<span class="fc bfc" id="L201" title="All 2 branches covered.">            if (this.waka.getLives() == 0) {</span>
+<span class="fc" id="L202">                this.gameOverTime = this.timeElapsed;</span>
+<span class="fc" id="L203">                this.isLost = true;</span>
+            }
+    
+            // move Waka
+<span class="fc" id="L207">            this.moveWaka();</span>
+    
+            // eat fruit
+<span class="fc" id="L210">            this.eatFruit();</span>
+    
+            // move ghosts depending on modes
+<span class="pc bpc" id="L213" title="1 of 4 branches missed.">            if (this.mode == Mode.FRIGHTENED &amp;&amp; !(this.isFrightenedEnd())) {</span>
+<span class="fc" id="L214">                Ghost.moveFrightenedGhost(this);</span>
+            }
+            else {
+                // move ghosts
+<span class="fc" id="L218">                this.manageModes();</span>
+<span class="fc" id="L219">                this.moveGhost();</span>
+            }
+    
+            // check if Waka and ghosts collide
+<span class="fc" id="L223">            this.checkCollision();</span>
+    
+            // draw all the elements
+<span class="fc" id="L226">            this.drawWalls();</span>
+<span class="fc" id="L227">            this.drawFruits();</span>
+<span class="fc" id="L228">            this.drawGhosts();</span>
+<span class="fc" id="L229">            this.drawWaka();</span>
+<span class="fc" id="L230">            this.drawWakaLives();    </span>
+        }
+<span class="fc" id="L232">    }</span>
+        
+
+    /**
+     * Draw walls
+     */
+    public void drawWalls() {
+<span class="fc bfc" id="L239" title="All 2 branches covered.">        for (Wall wall : this.walls) {</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">            if (wall.isEmpty) {</span>
+<span class="fc" id="L241">                continue;</span>
+            } else {
+<span class="fc" id="L243">                wall.draw(app);</span>
+            }  
+<span class="fc" id="L245">        } </span>
+<span class="fc" id="L246">    }</span>
+
+
+    /**
+     * Draw fruits.
+     * 
+     * &lt;p&gt; Draw those fruits that are not eatten by Waka
+     */
+    public void drawFruits() {
+<span class="fc bfc" id="L255" title="All 2 branches covered.">       for (Fruit fruit: this.fruits) {</span>
+<span class="fc bfc" id="L256" title="All 2 branches covered.">            if (fruit.getIsEaten()) {</span>
+<span class="fc" id="L257">                continue;</span>
+            }
+<span class="fc bfc" id="L259" title="All 2 branches covered.">            if (fruit instanceof SuperFruit) {</span>
+<span class="fc" id="L260">                SuperFruit superFruit = (SuperFruit) fruit;</span>
+<span class="fc" id="L261">                superFruit.draw(app);</span>
+<span class="fc" id="L262">            }</span>
+            else {
+<span class="fc" id="L264">                fruit.draw(app);</span>
+            }
+<span class="fc" id="L266">        } </span>
+<span class="fc" id="L267">    }</span>
+
+
+    /**
+     * Draw Waka.
+     * 
+     * &lt;p&gt; Handle the graphics for Waka. 
+     * &lt;p&gt; Waka switches between open mouth and closed mouth for every 8 frames.
+     * &lt;p&gt; Waka's mouth is always pointing to the direction it is currently moving.
+     */
+    public void drawWaka() {
+
+<span class="fc" id="L279">        this.frameCounter++;</span>
+
+<span class="fc bfc" id="L281" title="All 2 branches covered.">        if (this.frameCounter % 8 == 0) {</span>
+<span class="fc" id="L282">            this.waka.reverseIsClosed();</span>
+        }
+
+<span class="fc bfc" id="L285" title="All 2 branches covered.">        if (this.waka.getIsClosed()) {</span>
+<span class="fc" id="L286">            this.waka.setSprite(app.loadImage(&quot;src/main/resources/playerClosed.png&quot;));</span>
+<span class="fc bfc" id="L287" title="All 2 branches covered.">        } else if (this.waka.currentDirection == Direction.UP) {</span>
+<span class="fc" id="L288">            this.waka.setSprite(app.loadImage(&quot;src/main/resources/playerUp.png&quot;));</span>
+<span class="fc bfc" id="L289" title="All 2 branches covered.">        } else if (this.waka.currentDirection == Direction.DOWN) {</span>
+<span class="fc" id="L290">            this.waka.setSprite(app.loadImage(&quot;src/main/resources/playerDown.png&quot;));</span>
+<span class="fc bfc" id="L291" title="All 2 branches covered.">        } else if (this.waka.currentDirection == Direction.LEFT) {</span>
+<span class="fc" id="L292">            this.waka.setSprite(app.loadImage(&quot;src/main/resources/playerLeft.png&quot;));</span>
+<span class="fc bfc" id="L293" title="All 2 branches covered.">        } else if (this.waka.currentDirection == Direction.RIGHT) {</span>
+<span class="fc" id="L294">            this.waka.setSprite(app.loadImage(&quot;src/main/resources/playerRight.png&quot;));</span>
+        }
+<span class="fc" id="L296">        this.waka.draw(app);</span>
+<span class="fc" id="L297">    }</span>
+
+
+    /**
+     * Draw Waka's lives at bottoms left corner of the window.
+     */
+    public void drawWakaLives() {
+        // draw the number of lives at bottom left corner of the grid
+<span class="fc bfc" id="L305" title="All 2 branches covered.">        for (int i = 0; i &lt; this.waka.getLives(); i++) {</span>
+<span class="fc" id="L306">            Waka wakaTemp = new Waka(5 + i * 27, 545, app.loadImage(&quot;src/main/resources/playerRight.png&quot;));</span>
+<span class="fc" id="L307">            wakaTemp.draw(app);</span>
+        }
+<span class="fc" id="L309">    }</span>
+
+
+    /**
+     * Draw ghosts.
+     * 
+     * &lt;p&gt; If in FRIGHTENED mode, all ghosts have the same sprite.
+     * &lt;p&gt; If they are removed by Waka in FRIGHTENED mode, they will not be drawn.
+     */
+    public void drawGhosts() {
+
+<span class="fc bfc" id="L320" title="All 2 branches covered.">        for (Ghost ghost : this.ghosts) {</span>
+            
+<span class="fc bfc" id="L322" title="All 2 branches covered.">            if (ghost.isRemoved) {</span>
+<span class="fc" id="L323">                continue;</span>
+            }
+<span class="fc bfc" id="L325" title="All 2 branches covered.">            if (this.mode == Mode.FRIGHTENED) {</span>
+<span class="fc" id="L326">                ghost.setSprite(app.loadImage(&quot;src/main/resources/frightened.png&quot;));</span>
+            } else {
+<span class="fc bfc" id="L328" title="All 2 branches covered.">                if (ghost instanceof Ambusher) {</span>
+<span class="fc" id="L329">                    ghost.setSprite(app.loadImage(&quot;src/main/resources/ambusher.png&quot;));</span>
+<span class="fc bfc" id="L330" title="All 2 branches covered.">                } else if (ghost instanceof Chaser) {</span>
+<span class="fc" id="L331">                    ghost.setSprite(app.loadImage(&quot;src/main/resources/chaser.png&quot;));</span>
+<span class="fc bfc" id="L332" title="All 2 branches covered.">                } else if (ghost instanceof Ignorant) {</span>
+<span class="fc" id="L333">                    ghost.setSprite(app.loadImage(&quot;src/main/resources/ignorant.png&quot;));</span>
+                } else {
+<span class="fc" id="L335">                    ghost.setSprite(app.loadImage(&quot;src/main/resources/whim.png&quot;));</span>
+                }
+            }
+<span class="fc" id="L338">            ghost.draw(app);</span>
+<span class="fc" id="L339">        }</span>
+<span class="fc" id="L340">    }</span>
+
+
+    /**
+     * When Waka is at the same grid as fruit, fruit is eaten by Waka
+     */
+    public void eatFruit() {
+        
+<span class="fc bfc" id="L348" title="All 2 branches covered.">        for (Fruit fruit : this.fruits) {</span>
+<span class="fc bfc" id="L349" title="All 4 branches covered.">            if (fruit.x == this.waka.getX() &amp;&amp; fruit.y == this.waka.getY()) {</span>
+<span class="fc bfc" id="L350" title="All 2 branches covered.">                if (fruit instanceof SuperFruit) {</span>
+                
+                    // If Waka eats the super fruit, initialize frightenedStartTime as current time.
+<span class="fc bfc" id="L353" title="All 2 branches covered.">                    if (!fruit.getIsEaten()) {</span>
+<span class="fc" id="L354">                        this.frightenedStartTime = this.timeElapsed;</span>
+<span class="fc" id="L355">                        this.lastMode = this.mode;</span>
+<span class="fc" id="L356">                        this.mode = Mode.FRIGHTENED;</span>
+                    }
+                }
+    
+<span class="fc" id="L360">                fruit.setIsEaten(true);</span>
+            }
+<span class="fc" id="L362">        }</span>
+<span class="fc" id="L363">    }</span>
+
+
+    /**
+     * Manage the movement of Waka
+     * 
+     * &lt;p&gt; First, it checks if the next direction (set by users pressing keys) is movable.
+     * If it is movable, then set the current direction to it. 
+     * If not, then continue moving in its current direction.
+     * 
+     * &lt;p&gt; Second, it checks if it is movable if it moves in the current direction. 
+     * If it is movable, then move.
+     * If not, then stop.
+     */
+    public void moveWaka() {
+
+<span class="pc bpc" id="L379" title="1 of 2 branches missed.">        if (this.waka.isMovable(this.waka.nextDirection)) {</span>
+<span class="fc" id="L380">            this.waka.setCurrentToNext();</span>
+        }
+
+<span class="pc bpc" id="L383" title="1 of 2 branches missed.">        if (this.waka.isMovable(this.waka.currentDirection)) {</span>
+<span class="fc" id="L384">            this.waka.move();</span>
+        } 
+<span class="fc" id="L386">    }</span>
+
+    
+    /**
+     * Manage the modes of the game.
+     * 
+     * &lt;p&gt; If the time for the current mode is ended, switch to the other mode. 
+     */
+    public void manageModes() {
+        // The game runs 60 frames per second, if frameCounter is divisible by 60, then one second has passed.
+<span class="fc bfc" id="L396" title="All 4 branches covered.">        if (this.frameCounter % 60 == 0 &amp;&amp; this.frameCounter != 0) {</span>
+<span class="fc" id="L397">            this.modeTimeCounter++;</span>
+        }
+
+        // If all the elements of modeLength have been traversed through, then start from the beginning.
+<span class="fc bfc" id="L401" title="All 2 branches covered.">        if (this.modeCounter &gt; this.modeLength.size() - 1) {</span>
+<span class="fc" id="L402">            this.modeCounter = 0;</span>
+        }
+
+<span class="fc bfc" id="L405" title="All 2 branches covered.">        if (this.modeTimeCounter == this.modeLength.get(this.modeCounter)) {</span>
+<span class="fc" id="L406">            this.modeTimeCounter = 0;</span>
+<span class="fc" id="L407">            this.modeCounter++;</span>
+        }
+
+        /**
+         *  If modeCounter is an even number, then switch to SCATTER mode
+         *  If modeCounter is an odd number, then switch to CHASE mode
+        */ 
+<span class="fc bfc" id="L414" title="All 2 branches covered.">        if (modeCounter % 2 == 0) {</span>
+<span class="fc" id="L415">            this.mode = Mode.SCATTER;</span>
+        }
+        else {
+<span class="fc" id="L418">            this.mode = Mode.CHASE;</span>
+        }
+<span class="fc" id="L420">    }</span>
+
+
+    /**
+     * Manage the movement of ghosts.
+     */
+    public void moveGhost() {
+
+<span class="fc" id="L428">        Ambusher.handleMovement(this);</span>
+<span class="fc" id="L429">        Chaser.handleMovement(this);</span>
+<span class="fc" id="L430">        Ignorant.handleMovement(this);</span>
+<span class="fc" id="L431">        Whim.handleMovement(this);</span>
+<span class="fc" id="L432">    }</span>
+
+
+    /**
+     * Check if FRIGHTENED mode has ended.
+     * 
+     * &lt;p&gt; Return true if FRIGHTENED mode has eneded. Otherwise, return false.
+     * @return boolean 
+     */
+    public boolean isFrightenedEnd() {
+<span class="fc" id="L442">        int frightenedTimeElapsed = this.timeElapsed - this.frightenedStartTime;</span>
+<span class="fc bfc" id="L443" title="All 2 branches covered.">        if (frightenedTimeElapsed == this.frightenedLength) {</span>
+<span class="fc" id="L444">            this.mode = this.lastMode;</span>
+<span class="fc" id="L445">            return true;</span>
+        }
+<span class="fc" id="L447">        return false;</span>
+    }
+
+
+    /**
+     * Handles collision
+     * 
+     * &lt;p&gt; If Waka collides with a ghost, it will lose a life and 
+     * Waka and all the ghosts will go back to their initial positions.
+     */
+    public void collide() {
+
+<span class="fc" id="L459">        this.waka.setLives(this.waka.getLives() - 1);</span>
+
+<span class="fc" id="L461">        this.waka.backToInitialPosition();</span>
+
+<span class="fc bfc" id="L463" title="All 2 branches covered.">        for (Ghost ghost : this.ghosts) {</span>
+<span class="fc" id="L464">            ghost.backToInitialPosition();</span>
+<span class="fc" id="L465">        }</span>
+<span class="fc" id="L466">    }</span>
+    
+
+    /**
+     * Handle collision logic.
+     * 
+     * &lt;p&gt; Waka and ghosts will collide if either of the 4 corners of 
+     * their sprites overlap. 
+     */
+    public void checkCollision() {
+
+<span class="fc" id="L477">        int wakaLeft = this.waka.getX();</span>
+<span class="fc" id="L478">        int wakaRight = this.waka.getX() + this.waka.getWidth();</span>
+<span class="fc" id="L479">        int wakaTop = this.waka.getY();</span>
+<span class="fc" id="L480">        int wakaBottom = this.waka.getY() + this.waka.getHeight();</span>
+
+<span class="fc bfc" id="L482" title="All 2 branches covered.">        for (Ghost ghost : this.ghosts) {</span>
+
+<span class="fc bfc" id="L484" title="All 2 branches covered.">            if (ghost.isRemoved) {</span>
+<span class="fc" id="L485">                continue;</span>
+            }
+            
+<span class="fc" id="L488">            int ghostLeft = ghost.getX();</span>
+<span class="fc" id="L489">            int ghostRight = ghost.getX() + ghost.getWidth();</span>
+<span class="fc" id="L490">            int ghostTop = ghost.getY();</span>
+<span class="fc" id="L491">            int ghostBottom = ghost.getY() + ghost.getHeight();</span>
+
+<span class="pc bpc" id="L493" title="1 of 8 branches missed.">            if (wakaRight &gt; ghostLeft &amp;&amp; wakaLeft &lt; ghostRight &amp;&amp; wakaBottom &gt; ghostTop &amp;&amp; wakaTop &lt; ghostBottom) {</span>
+                // If Waka and ghost collide in FRIGHTENED mode, Waka will not lose a life and the ghost will be eaten
+<span class="fc bfc" id="L495" title="All 2 branches covered.">                if (this.mode == Mode.FRIGHTENED) {</span>
+<span class="fc" id="L496">                    ghost.isRemoved = true;</span>
+                } 
+
+                else {  
+                    /**
+                     * If Waka is hit by a ghost not in FRIGHTENED mode, 
+                     * then return all the ghosts that have been removed.
+                     */
+<span class="fc bfc" id="L504" title="All 2 branches covered.">                    for (Ghost ghost1 : this.ghosts) {</span>
+<span class="fc bfc" id="L505" title="All 2 branches covered.">                        if (ghost1.isRemoved) {</span>
+<span class="fc" id="L506">                            ghost1.isRemoved = false;</span>
+                        }
+<span class="fc" id="L508">                    }</span>
+<span class="fc" id="L509">                    this.collide();</span>
+                }
+            }
+<span class="fc" id="L512">        }</span>
+<span class="fc" id="L513">    }</span>
+
+
+    /**
+     * Check if all the fruits in the map have been collected by Waka
+     * 
+     * @return (boolean) Return true if all the fruits have been collected by Waka. 
+     * Otherwise, return false.
+     */
+    public boolean isCollectAllFruits() {
+
+<span class="fc bfc" id="L524" title="All 2 branches covered.">        for (Fruit fruit : this.fruits) {</span>
+<span class="fc bfc" id="L525" title="All 2 branches covered.">            if (!(fruit.getIsEaten())) {</span>
+<span class="fc" id="L526">                return false;</span>
+            }
+<span class="fc" id="L528">        }</span>
+<span class="fc" id="L529">        return true;</span>
+    }
+    
+
+    /**
+     * Render the YOU WIN screen 
+     * 
+     * &lt;p&gt; Note: To ensure it it displays properly, users must have PressStart2P-Regular font installed 
+     * in their computers.
+     */
+    public void displayWinScreen() {
+<span class="fc" id="L540">        this.app.text(&quot;YOU WIN&quot;, 140, 240);</span>
+<span class="fc" id="L541">    }</span>
+
+
+    /**
+     * Render the GAME OVER screen 
+     * 
+     * &lt;p&gt; Note: To ensure it it displays properly, users must have PressStart2P-Regular font installed 
+     * in their computers.
+     */
+    public void displayLoseScreen() {
+<span class="fc" id="L551">        this.app.text(&quot;GAME OVER&quot;, 115, 240);</span>
+<span class="fc" id="L552">    }</span>
+
+    /**
+     * Handle the time for displaying the game ending screen.
+     * 
+     * &lt;p&gt; If the game is won or lost, display the win or lose screen for 10 seconds. 
+     * If 10 seconds have passed, it will restart the game.
+     */
+    public void handleGameEnd() {
+<span class="fc bfc" id="L561" title="All 2 branches covered.">        if (this.gameOverTime + 10 == this.timeElapsed) {</span>
+<span class="fc" id="L562">            this.restartGame();</span>
+        }
+        else {
+<span class="fc bfc" id="L565" title="All 2 branches covered.">            if (this.isWon) {</span>
+<span class="fc" id="L566">                this.displayWinScreen();</span>
+            } 
+            else {
+<span class="fc" id="L569">                this.displayLoseScreen();</span>
+            }
+        }
+<span class="fc" id="L572">    }</span>
+
+
+    /**
+     * Restart the game.
+     * 
+     * &lt;p&gt; Restart the game by resetting all the elements, with all Fruit, SuperFruit,
+     * Ghosts, and lives restored.
+     */
+    public void restartGame() {
+
+<span class="fc bfc" id="L583" title="All 2 branches covered.">        for (Fruit fruit : this.fruits) {</span>
+<span class="fc" id="L584">            fruit.setIsEaten(false);</span>
+<span class="fc" id="L585">        }</span>
+
+<span class="fc bfc" id="L587" title="All 2 branches covered.">        for (Ghost ghost : this.ghosts) {</span>
+<span class="fc" id="L588">            ghost.backToInitialPosition();</span>
+<span class="fc" id="L589">            ghost.isRemoved = false;</span>
+<span class="fc" id="L590">        }</span>
+
+<span class="fc" id="L592">        this.waka.backToInitialPosition();</span>
+<span class="fc" id="L593">        this.waka.setLives(this.wakaLives);</span>
+<span class="fc" id="L594">        this.waka.resetCurrentDirection();</span>
+<span class="fc" id="L595">        this.waka.resetNextDirection();</span>
+
+<span class="fc" id="L597">        this.isWon = false;</span>
+<span class="fc" id="L598">        this.isLost = false;</span>
+
+<span class="fc" id="L600">        this.modeCounter = 0;</span>
+<span class="fc" id="L601">        this.modeTimeCounter = 0;</span>
+<span class="fc" id="L602">        this.mode = Mode.SCATTER;</span>
+<span class="fc" id="L603">        this.lastMode = Mode.SCATTER;</span>
+    
+<span class="fc" id="L605">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
